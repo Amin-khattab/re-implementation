@@ -1,3 +1,5 @@
+# this model has a problem because i have given it gpt 2 model as the brain which is huge btw but it doesnt have the tiktoken tokenizer so it preforms really poor 
+
 import torch
 import math
 import tiktoken

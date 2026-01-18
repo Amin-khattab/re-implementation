@@ -81,3 +81,41 @@ for step in range(steps):
         lr = scheduler.get_last_lr()[0]
         print(f"Step: {step} | Loss: {loss.item():.4f} | LR: {lr:.6f}")
 print("finished training ")
+
+#pipeLine
+
+import torch
+import pickle
+
+from transformers import GPT2LMHeadModel
+
+# 1. SETUP
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+path = "./my_char_model/my_char_model"  # Where your model folder is
+meta = "./my_char_model/meta_char.pkl"  # Where your dictionary is
+
+# 2. LOAD EVERYTHING
+print("Loading...")
+model = GPT2LMHeadModel.from_pretrained(path).to(device)
+model.eval()  # Set to "Talk Mode"
+
+with open(meta, 'rb') as f:
+    data = pickle.load(f)
+    stoi, iots = data['stoi'], data['iots']
+
+
+# 3. THE MAGIC FUNCTION
+def speak(prompt):
+    # Encode (Text -> Numbers)
+    input_ids = [stoi.get(c, stoi['\n']) for c in prompt]
+    x = torch.tensor(input_ids, dtype=torch.long, device=device).unsqueeze(0)
+
+    # Generate
+    output = model.generate(x, max_new_tokens=200, do_sample=True, top_k=50)
+
+    # Decode (Numbers -> Text)
+    return "".join([iots[i] for i in output[0].tolist()])
+
+
+print(speak(" "))
+

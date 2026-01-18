@@ -102,3 +102,61 @@ for step in range(steps):
         print(f"Step: {step} | Loss: {loss.item():.4f} | LR: {lr:.6f}")
 
 print("Finished training.")
+
+#pipeline
+
+import torch
+import tiktoken
+from transformers import GPT2LMHeadModel
+
+# --- 1. SETTINGS ---
+path = "./my_pro_model"  # Ensure this matches your saved folder name
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# --- 2. LOAD IT ---
+print(f"Loading Bot on {device}...")
+model = GPT2LMHeadModel.from_pretrained(path).to(device)
+model.eval()
+enc = tiktoken.get_encoding("gpt2")
+
+
+# --- 3. THE FUNCTION ---
+def ask(question):
+    # Format exactly like training data
+    prompt = f"Question: {question}\nAnswer:"
+
+    # Encode
+    ids = enc.encode(prompt)
+    x = torch.tensor(ids, dtype=torch.long, device=device).unsqueeze(0)
+
+    # --- ADDED: THE ATTENTION MASK ---
+    # This tells the model "Pay attention to all these words"
+    mask = torch.ones_like(x)
+
+    # Generate
+    output = model.generate(
+        x,
+        attention_mask=mask,  # <--- PASSED HERE
+        max_new_tokens=200,
+        do_sample=False,  # Strict mode (No randomness)
+        pad_token_id=50256
+    )
+
+    # Decode & Clean
+    full_text = enc.decode(output[0].tolist())
+
+    try:
+        # Extract just the answer part
+        answer = full_text.split("Answer:")[1].split("<|endoftext|>")[0].strip()
+        return answer
+    except:
+        return full_text  # Return raw text if something weird happens
+
+
+# --- 4. USE IT ---
+print("Ready! Type 'quit' to exit.")
+while True:
+    q = input("\nYou: ")
+    if q.lower() == "quit": break
+    print("Bot:", ask(q))
+

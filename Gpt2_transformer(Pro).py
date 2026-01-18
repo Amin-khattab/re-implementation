@@ -1,3 +1,5 @@
+# this is the same as the simple version but this one performs much better because it has the Gpt tokenizer(tiktoken)
+
 import torch
 import math
 import tiktoken

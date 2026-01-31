@@ -99,4 +99,54 @@ print("🚀 Starting training...")
 trainer.train()
 
 
-#pipeline
+#pipeline(same as the Llama i create )---------------------------
+
+
+print("Starting Training...")
+trainer_stats = trainer.train()
+print("✅ Done! A LlamaBot is ready.")
+
+# --- RUN THIS CELL TO CHAT ---
+from unsloth import FastLanguageModel
+
+# 1. Switch to "Inference Mode" (Makes it faster and stops it from learning)
+FastLanguageModel.for_inference(model)
+
+print("🤖 Bot is Online! (Type 'exit' to stop)")
+print("-" * 40)
+
+while True:
+    # 2. Get your input
+    user_question = input("You: ")
+    
+    # Check if you want to quit
+    if user_question.lower() in ["exit", "quit", "stop"]:
+        print("👋 Bye!")
+        break
+
+    # 3. Format the prompt (The same way we trained it)
+    prompt = alpaca_prompt.format(
+        user_question, # Instruction
+        "",            # Input (Leave blank)
+        "",            # Output (Leave blank for the AI to fill)
+    )
+
+    # 4. Send to GPU
+    inputs = tokenizer([prompt], return_tensors = "pt").to("cuda")
+
+    # 5. Generate the Answer
+    outputs = model.generate(**inputs, max_new_tokens = 128, use_cache = True)
+    
+    # 6. Decode (Turn numbers back to words)
+    decoded_output = tokenizer.batch_decode(outputs)[0]
+    
+    # 7. Clean up the output (Cut off the prompt part)
+    # We split the text at "### Response:" and take the second half
+    response = decoded_output.split("### Response:\n")[-1]
+    
+    # Remove the "End of Text" token if it shows up
+    response = response.replace("<|end_of_text|>", "").strip()
+
+    # 8. Print the result
+    print(f"Bot: {response}")
+    print("-" * 40)

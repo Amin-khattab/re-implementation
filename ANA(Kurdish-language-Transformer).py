@@ -1,3 +1,8 @@
+!pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
+!pip install --no-deps xformers trl peft accelerate bitsandbytes
+
+# this is ran on GC 
+
 import os
 import torch
 from unsloth import FastLanguageModel
@@ -11,7 +16,7 @@ torch.cuda.empty_cache()
 import gc
 gc.collect()
 
-# 1. SETTINGS
+# 1. SETTINGS GC error handeling 
 os.environ["WANDB_DISABLED"] = "true"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
@@ -66,7 +71,7 @@ trainer = SFTTrainer(
     train_dataset = formated_dataset,
     dataset_text_field = "text",
     max_seq_length = 512,
-    packing = False,  # <-- DISABLE PACKING (causes the batch mismatch)
+    packing = False,
     args = TrainingArguments(
         num_train_epochs = 2,
         logging_steps = 25,
@@ -85,10 +90,13 @@ trainer = SFTTrainer(
         dataloader_num_workers = 0,
         dataloader_pin_memory = False,
         save_strategy = "no",
-        torch_compile = False,  # <-- DISABLE COMPILE
+        torch_compile = False,  
     )
 )
 
 # 5. EXECUTE
 print("🚀 Starting training...")
 trainer.train()
+
+
+#pipeline

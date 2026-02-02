@@ -99,7 +99,7 @@ print("🚀 Starting training...")
 trainer.train()
 
 
-#pipeline(same as the Llama i create )---------------------------
+#pipeline(same as the Llama i created )---------------------------
 
 
 print("Starting Training...")

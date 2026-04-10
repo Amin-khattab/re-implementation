@@ -6,6 +6,7 @@ A comprehensive collection of Transformer models implemented in Python & PyTorch
 Folder	Description	Key Focus
 Scratch_Models	Pure implementations of Transformer blocks without high-level APIs.	Logic, Math, Attention Masks
 pre_trained	Leveraging state-of-the-art weights (GPT-2, Ollama, etc.).	Fine-tuning, Inference, Optimization
+
 🛠️ Tech Stack
 
 Language: Python

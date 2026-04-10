@@ -1,32 +1,33 @@
-Transformer Architectures Hub
-A comprehensive collection of Transformer models implemented in Python & PyTorch. This repository tracks my journey from building "Attention" mechanisms from scratch to deploying and fine-tuning advanced pre-trained models.
+# re-implementation
 
-📂 Project Structure
+A repo where I re-implement transformer models — some from scratch to really understand how they work, and others using pre-trained models to see how the big ones are actually used in practice. Splitting it this way helps me keep the "learning the internals" stuff separate from the "using real models" stuff.
 
-Folder	Description	Key Focus
-Scratch_Models	Pure implementations of Transformer blocks without high-level APIs.	Logic, Math, Attention Masks
-pre_trained	Leveraging state-of-the-art weights (GPT-2, Ollama, etc.).	Fine-tuning, Inference, Optimization
+## What's in here
 
-🛠️ Tech Stack
+### `Scratch_Models/`
+Transformers I built from the ground up, no pre-trained weights.
 
-Language: Python
+| File | What it is |
+|------|------------|
+| `simple-Transformer.py` | A minimal transformer implementation — the bare bones |
+| `simpler_transformer(explanation).py` | Same idea but with comments and explanations, basically my notes to myself on how each piece works |
 
-Frameworks: PyTorch, Hugging Face transformers
+### `pre_trained/`
+Working with existing pre-trained models instead of training from scratch.
 
-Tools: Ollama, NumPy, Scikit-learn
+| File | What it is |
+|------|------------|
+| `ANA(Kurdish-language-Transformer).py` | A transformer setup for Kurdish — something I care about personally, trying to get decent results on a low-resource language |
+| `GPT2-Transformer(simple).py` | Basic GPT-2 usage, just getting it running |
+| `Gpt2_transformer(Pro).py` | A more advanced GPT-2 setup — fine-tuning, better config, closer to how you'd actually use it |
+| `Ollama-Transformer.py` | Hooking into Ollama to run local models |
 
-🚀 Highlights
+## Why I built this
 
-Kurdish-Language-Transformer: Tailoring attention mechanisms for the Kurdish language.
+Reading papers and watching explanations only gets you so far — at some point you have to actually write the thing yourself. The scratch models are me trying to understand attention, embeddings, and all the inner workings by building them. The pre-trained side is the opposite end: learning how to actually use production-level models instead of toy ones.
 
-GPT2-Transformer: Advanced implementation focusing on generative capabilities.
+The Kurdish transformer is a side interest of mine — there aren't many good models for Kurdish out there and I wanted to mess around with building something useful in that direction.
 
-Scratch Implementations: Simple to complex architectural breakdowns for educational purposes.
+## Running the scripts
 
-📈 Future Roadmap
-
-[ ] Implement Vision Transformers (ViT) from scratch.
-
-[ ] Optimize Kurdish model for specific downstream tasks (Sentiment/Translation).
-
-[ ] Integrate specialized attention variants (Longformer/Performer).
+You'll need Python with the usual ML stack:
